@@ -1,0 +1,55 @@
+# noblibs
+This project is mainly aimed at researching how we could easily add building libraries for projects that use [nob.h](https://github.com/tsoding/nob.h).
+
+### Show me the code
+For raylib:
+```sh
+wget https://github.com/mundusnine/noblibs/noblib_raylib.c
+touch ./nob.c
+```
+In your nob.c file:
+```c
+#define NOB_IMPLEMENTATION
+#define NOB_STRIP_PREFIX
+#include "nob.h"
+
+// This is optionnal, will default to "build"
+// #define BUILD_FOLDER "path/to/build/folder"
+// This is optionnal, will default to "Libraries/raylib"
+// #define RAYLIB_PATH "path/to/my/cloned/raylib"
+// The file will include the implementation by default, if making another noblib_* that uses raylib(exemple: rlImGui) and needs it's includes and flags, do : #define RAYLIB_NOIMPLEMENTATION 
+#include "noblib_raylib.c"
+
+int main(){
+  File_Paths o_files = {0};
+  if(!build_raylib(o_files)) return 1;
+
+  Cmd cmd = {0};
+
+  nob_cc(&cmd);
+  nob_cc_inputs(&cmd, "./src/main.c");
+  cmd_append(&cmd,RAYLIB_INCLUDES);
+  for(int i =0; i < o_files.count;++i){
+      cmd_append(&cmd,o_files.items[i]);
+  }
+  nob_cc_output(&cmd, "./my_exe");
+  cmd_append(&cmd,RAYLIB_LFLAGS);
+  if(!cmd_run_sync_and_reset(&cmd)) return 1;
+}
+```
+
+### Why ?
+As I used `nob.h`, I routinely would have different projects that used, for exemple, raylib. What I would do is copy-paste my code from other build scripts of old projects to my new projects. This is can be tedious and error prone, so I wanted a new way to keep the building steps in a centralised place where I can  simply `wget` the build steps and include them in my nobuild script with ease. This issue can also be seen in how tsoding always builds raylib during his streams, basically he uses the library releases from raylib instead of building everything from source. But when you want to version your dependencies using git submodules, this method won't suffice. 
+
+### When making noblib files
+- Always use `.c` for the extension, as we want to infer that the file will include the implementation for the nob.c file
+- Always add a header guard, to forward declare if need be:
+```c
+#ifndef NOB_H_
+#define NOB_STRIP_PREFIX
+#include "nob.h"
+#endif
+```
+- Always define `LIBRARYNAME_LFLAGS` and `LIBRARYNAME_INCLUDES` to expose what the end nob.c script needs.
+- Always validate that files need a rebuild using: `nob_needs_rebuild`
+- Automatically create build subdirectories, so users can delete the folder in the build folder for a fresh rebuild of only your library
