@@ -21,6 +21,11 @@ In your nob.c file:
 #include "noblib_raylib.c"
 
 int main(){
+  NOB_GO_REBUILD_URSELF_PLUS(argc, argv,RAYLIB_FILE);
+  // ^--- Only needed if you intend on changing the build file, use NOB_GO_REBUILD_URSELF otherwise
+  if (!mkdir_if_not_exists("build")){ return 1;}
+  if (!mkdir_if_not_exists("build/Libraries")) {return 1; }
+  // ^---- UPDATE THE PATH IF LIBRARIES ARE SOMEWHERE ELSE
   File_Paths o_files = {0};
   if(!build_raylib(o_files)) return 1;
 
