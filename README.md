@@ -46,7 +46,7 @@ int main(){
 ```
 
 ### Why ?
-As I used `nob.h`, I routinely would have different projects that used, for exemple, raylib. What I would do is copy-paste my code from other build scripts of old projects to my new projects. This is can be tedious and error prone, so I wanted a new way to keep the building steps in a centralised place where I can  simply `wget` the build steps and include them in my nobuild script with ease. This issue can also be seen in how tsoding always builds raylib during his streams. Basically, he uses the library releases from raylib instead of building everything from source. But when you want to version your dependencies using git submodules, this method won't suffice. 
+As I used `nob.h`, I routinely would have different projects that used, for exemple, raylib. What I would do is copy-paste my code from other build scripts of old projects to my new projects. This can be tedious and error prone, so I wanted a new way to keep the building steps in a centralised place where I can  simply `wget` the build steps and include them in my nobuild script with ease. This issue can also be seen in how tsoding always builds raylib during his streams. Basically, he uses the library releases from raylib instead of building everything from source. But when you want to version your dependencies using git submodules, this method won't suffice. 
 
 ### When making noblib files
 - Always use `.c` for the extension, as we want to infer that the file will include the implementation for the nob.c file
