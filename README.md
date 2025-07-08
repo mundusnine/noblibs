@@ -39,7 +39,7 @@ int main(){
 ```
 
 ### Why ?
-As I used `nob.h`, I routinely would have different projects that used, for exemple, raylib. What I would do is copy-paste my code from other build scripts of old projects to my new projects. This is can be tedious and error prone, so I wanted a new way to keep the building steps in a centralised place where I can  simply `wget` the build steps and include them in my nobuild script with ease. This issue can also be seen in how tsoding always builds raylib during his streams, basically he uses the library releases from raylib instead of building everything from source. But when you want to version your dependencies using git submodules, this method won't suffice. 
+As I used `nob.h`, I routinely would have different projects that used, for exemple, raylib. What I would do is copy-paste my code from other build scripts of old projects to my new projects. This is can be tedious and error prone, so I wanted a new way to keep the building steps in a centralised place where I can  simply `wget` the build steps and include them in my nobuild script with ease. This issue can also be seen in how tsoding always builds raylib during his streams. Basically, he uses the library releases from raylib instead of building everything from source. But when you want to version your dependencies using git submodules, this method won't suffice. 
 
 ### When making noblib files
 - Always use `.c` for the extension, as we want to infer that the file will include the implementation for the nob.c file
@@ -51,5 +51,14 @@ As I used `nob.h`, I routinely would have different projects that used, for exem
 #endif
 ```
 - Always define `LIBRARYNAME_LFLAGS` and `LIBRARYNAME_INCLUDES` to expose what the end nob.c script needs.
-- Always validate that files need a rebuild using: `nob_needs_rebuild`
 - Automatically create build subdirectories, so users can delete the folder in the build folder for a fresh rebuild of only your library
+- When developing a noblib_* always validate that files need a rebuild using: `NOB_GO_REBUILD_URSELF_PLUS`. To enable this to work, add in your noblib_*.c file this:
+```c
+const char* LIBRARYNAME_FILE = __FILE__;
+```
+so that your build file looks like: 
+```c
+int main(int argc, char** argv){
+    NOB_GO_REBUILD_URSELF_PLUS(argc, argv, LIBRARYNAME_FILE);
+}
+```
