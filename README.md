@@ -17,7 +17,9 @@ In your nob.c file:
 // #define BUILD_FOLDER "path/to/build/folder"
 // This is optionnal, will default to "Libraries/raylib"
 // #define RAYLIB_PATH "path/to/my/cloned/raylib"
-// The file will include the implementation by default, if making another noblib_* that uses raylib(exemple: rlImGui) and needs it's includes and flags, do : #define RAYLIB_NOIMPLEMENTATION 
+// The file will include the implementation by default, if making another noblib_*
+// that uses raylib(exemple: rlImGui) and needs it's includes and flags, do :
+// #define RAYLIB_NOIMPLEMENTATION 
 #include "noblib_raylib.c"
 
 int main(){
