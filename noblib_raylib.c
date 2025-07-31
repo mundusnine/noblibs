@@ -30,7 +30,7 @@ static const char *raylib_modules[] = {
 #endif
 
 const char* RAYLIB_FILE = __FILE__;
-#define RAYLIB_INCLUDES RAYLIB_PATH "/src"
+#define RAYLIB_INCLUDES RAYLIB_PATH "/src", RAYLIB_PATH "/src/external/glfw/include"
 #ifdef _WIN32
     #define RAYLIB_LFLAGS "-lm", "-lgdi32","-lwinmm"
 #else
@@ -77,8 +77,9 @@ bool build_raylib(File_Paths* end_cmd)
             cmd_append(&cmd, "-L/usr/lib");
             #endif
             cmd_append(&cmd, "-DPLATFORM_DESKTOP","-fPIC");
-            cmd_append(&cmd, "-I"RAYLIB_PATH"/src/external/glfw/include");
-            cmd_append(&cmd, "-I"RAYLIB_PATH"/src");
+            nob_cc_includes(&cmd,
+                RAYLIB_INCLUDES
+            );
             cmd_append(&cmd, "-c", input_path);
             cmd_append(&cmd, "-o", output_path);
 

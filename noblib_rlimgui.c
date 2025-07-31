@@ -8,6 +8,8 @@
 #include "nob.h"
 #endif
 
+#include "noblib_raylib.c"
+
 //BEGIN dependencies path
 #ifndef RAYLIB_PATH
 #define RAYLIB_PATH "Libraries/raylib"
@@ -65,8 +67,7 @@ bool build_rlImGui(File_Paths* end_cmd)
         }
         nob_cc(&cmd,true);
         nob_cc_includes(&cmd,
-            RAYLIB_PATH "/src/external/glfw/include",
-            RAYLIB_PATH "/src",
+            RAYLIB_INCLUDES,
             IMGUI_PATH,
             RLIMGUI_PATH
         );
