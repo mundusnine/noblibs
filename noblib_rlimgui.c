@@ -1,3 +1,8 @@
+/*
+    For git repo: https://github.com/raylib-extras/rlImGui.git
+    git commit:  aba659ea
+*/
+
 #ifndef NOB_H_
 #define NOB_STRIP_PREFIX
 #include "nob.h"
@@ -66,6 +71,7 @@ bool build_rlImGui(File_Paths* end_cmd)
             RLIMGUI_PATH
         );
 
+        cmd_append(&cmd,"-ggdb3");
         cmd_append(&cmd,"-fPIC");
         cmd_append(&cmd,"-mcrc32");
         

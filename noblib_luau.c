@@ -1,10 +1,16 @@
+/*
+    For git repo: https://github.com/luau-lang/luau.git
+    git commit:  66202dc
+*/
+
 #ifndef NOB_H_
 #define NOB_STRIP_PREFIX
 #include "nob.h"
 #endif
 
+
 //@TODO: Luau as many modules that can be used, in our case we only use what is specified from the readme
-// to have a basic runtime with compilation. In the futur we should evaluate
+// to have a basic runtime with compilation. In the futur we should evaluate what should be exposed.
 
 #ifndef LUAU_PATH
 #define LUAU_PATH "Libraries/luau"
@@ -14,7 +20,7 @@ const char* LUAU_FILE = __FILE__;
 
 #define LUAU_LFLAGS "-lstdc++"
 
-#define LUAU_INCLUDES LUAU_PATH "/VM/include", LUAU_PATH "/Compiler/include"
+#define LUAU_INCLUDES LUAU_PATH "/Common/include", LUAU_PATH "/VM/include", LUAU_PATH "/VM/src", LUAU_PATH "/Ast/include", LUAU_PATH "/Compiler/include"
 
 bool build_luau(File_Paths* end_cmd)
 {
@@ -118,17 +124,16 @@ bool build_luau(File_Paths* end_cmd)
         }
         nob_cc(&cmd,true);
         nob_cc_includes(&cmd,
-            LUAU_PATH"/Common/include",
-            LUAU_PATH"/VM/include",
-            LUAU_PATH"/VM/src",
-            LUAU_PATH"/Ast/include",
-            LUAU_PATH"/Compiler/include"
+            LUAU_INCLUDES
         );
 
+        cmd_append(&cmd,"-ggdb3");
         cmd_append(&cmd,"-fPIC");
         cmd_append(&cmd,"-std=c++17");
-        cmd_append(&cmd,"-DLUAU");
-        cmd_append(&cmd,"-DLUA_VECTOR_SIZE=4");
+        /* 
+            DO NOT UNCOMMENT, here be dragons... but most likely bugs. 
+        */
+        // cmd_append(&cmd,"-DLUA_VECTOR_SIZE=4");
         
         cmd_append(&cmd,"-c", infile);
         cmd_append(&cmd,"-o",temp);

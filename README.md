@@ -50,6 +50,13 @@ As I used `nob.h`, I routinely would have different projects that used, for exem
 
 ### When making noblib files
 - Always use `.c` for the extension, as we want to infer that the file will include the implementation for the nob.c file
+- At the top, always add the repo url and the revision version used to compile the library:
+```c
+/*
+    For git repo: https://github.com/raysan5/raylib.git
+    git commit:  688a81d
+*/
+```
 - Always add a header guard, to forward declare if need be:
 ```c
 #ifndef NOB_H_

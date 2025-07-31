@@ -1,3 +1,9 @@
+/*
+    For git repo: https://github.com/raysan5/raylib.git
+    git commit:  688a81d
+    This one should work with 5.6 dev+ usually. I even tested with other versions of raylib 5.0. 
+    If you have bugs, report them to the specified authorities, that's me.
+*/
 #ifndef NOB_H_
 #define NOB_STRIP_PREFIX
 #include "nob.h"
