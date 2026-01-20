@@ -1,6 +1,8 @@
 /*
     For git repo: https://github.com/raylib-extras/rlImGui.git
     git commit:  aba659ea
+    For imgui git repo: https://github.com/ocornut/imgui
+    imgui commit: 97428e8a
 */
 
 #ifndef NOB_H_
@@ -26,7 +28,7 @@
 
 const char* RLIMGUI_FILE = __FILE__;
 #define RLIMGUI_LFLAGS "-lstdc++"
-#define RLIMGUI_INCLUDES IMGUI_PATH, RLIMGUI_PATH
+#define RLIMGUI_INCLUDES "-I"IMGUI_PATH, "-I"RLIMGUI_PATH
 
 bool build_rlImGui(File_Paths* end_cmd)
 {
@@ -43,7 +45,7 @@ bool build_rlImGui(File_Paths* end_cmd)
     
     const char* build_folder = "build";
     File_Paths files = {0};
-    nob_cc_inputs(&files,
+    nob_cc_inputs((Cmd*)&files,
         //UI
         IMGUI_PATH"/imgui.cpp",
         IMGUI_PATH"/imgui_draw.cpp",
@@ -60,16 +62,15 @@ bool build_rlImGui(File_Paths* end_cmd)
         char* temp = strstr(filepath,".");
         temp[0] = '\0';
         temp = temp_sprintf("%s/%s.o",build_folder,filepath);
-        cmd_append(end_cmd,strdup(temp));
+        cmd_append((Cmd*)end_cmd,strdup(temp));
 
         if(!nob_needs_rebuild1(temp,infile)){
             continue;
         }
-        nob_cc(&cmd,true);
-        nob_cc_includes(&cmd,
+        nob_cc(&cmd);
+        cmd_append(&cmd,
             RAYLIB_INCLUDES,
-            IMGUI_PATH,
-            RLIMGUI_PATH
+            RLIMGUI_INCLUDES
         );
 
         cmd_append(&cmd,"-ggdb3");
