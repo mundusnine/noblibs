@@ -30,7 +30,7 @@ static const char *raylib_modules[] = {
 #endif
 
 const char* RAYLIB_FILE = __FILE__;
-#define RAYLIB_INCLUDES RAYLIB_PATH "/src", RAYLIB_PATH "/src/external/glfw/include"
+#define RAYLIB_INCLUDES "-I"RAYLIB_PATH "/src", "-I"RAYLIB_PATH "/src/external/glfw/include"
 #ifdef _WIN32
     #define RAYLIB_LFLAGS "-lm", "-lgdi32","-lwinmm"
 #else
@@ -53,11 +53,11 @@ bool build_raylib(File_Paths* end_cmd)
         const char *input_path = temp_sprintf(RAYLIB_PATH"/src/%s.c", raylib_modules[i]);
         const char *output_path = temp_sprintf("%s/%s.o", RAYLIB_BUILD_PATH, raylib_modules[i]);
         output_path = temp_sprintf("%s/%s.o", RAYLIB_BUILD_PATH, raylib_modules[i]);
-        cmd_append(end_cmd,output_path);
+        cmd_append((Nob_Cmd*)end_cmd,output_path);
 
         if (needs_rebuild(output_path, &input_path, 1)) {
             cmd.count = 0;
-            nob_cc(&cmd,false);
+            nob_cc(&cmd);
             cmd_append(&cmd, "-ggdb3");
             #ifdef __ZIGC__
                 cmd_append(&cmd, "-fno-sanitize=undefined","-fno-omit-frame-pointer");
@@ -77,9 +77,7 @@ bool build_raylib(File_Paths* end_cmd)
             cmd_append(&cmd, "-L/usr/lib");
             #endif
             cmd_append(&cmd, "-DPLATFORM_DESKTOP","-fPIC");
-            nob_cc_includes(&cmd,
-                RAYLIB_INCLUDES
-            );
+            cmd_append(&cmd, RAYLIB_INCLUDES);
             cmd_append(&cmd, "-c", input_path);
             cmd_append(&cmd, "-o", output_path);
 
